@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+MSG_FILE="$1"
+GIT_DIR="$(git rev-parse --git-dir)"
+
+# Allow merge commits to keep generated merge subjects.
+if [[ -f "$GIT_DIR/MERGE_HEAD" ]]; then
+  exit 0
+fi
+
+subject="$(sed -n '1p' "$MSG_FILE" | tr -d '\r')"
+
+if [[ -z "${subject// }" ]]; then
+  echo "[commit-harness] 커밋 메시지가 비어 있습니다."
+  echo "예시: fix : \"연령별 취업자 라벨 정리\""
+  exit 1
+fi
+
+# Auto-normalize first line to required envelope.
+if [[ ! "$subject" =~ ^fix\ :\ ".+"$ ]]; then
+  if [[ "$subject" =~ ^fix[[:space:]]*:[[:space:]]*(.+)$ ]]; then
+    raw="${BASH_REMATCH[1]}"
+  else
+    raw="$subject"
+  fi
+  raw="${raw#\"}"
+  raw="${raw%\"}"
+  subject="fix : \"$raw\""
+
+  tmp_file="$(mktemp)"
+  {
+    printf '%s\n' "$subject"
+    tail -n +2 "$MSG_FILE"
+  } > "$tmp_file"
+  mv "$tmp_file" "$MSG_FILE"
+fi
+
+if ! printf '%s' "$subject" | grep -Eq '^fix : ".+"$'; then
+  echo "[commit-harness] 형식 오류: fix : \"한국어 메시지\""
+  exit 1
+fi
+
+if ! printf '%s' "$subject" | grep -Eq '[가-힣]'; then
+  echo "[commit-harness] 메시지는 한국어를 포함해야 합니다."
+  echo "예시: fix : \"교육 지표 축 라벨 수정\""
+  exit 1
+fi
+
+inside="$(printf '%s' "$subject" | sed -E 's/^fix : "(.*)"$/\1/')"
+if [[ ${#inside} -gt 60 ]]; then
+  echo "[commit-harness] 메시지가 너무 깁니다(최대 60자). 더 작은 작업 단위로 쪼개세요."
+  exit 1
+fi

@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+MSG_FILE="$1"
+SOURCE="${2:-}"
+
+# Skip auto-template for merge/squash/amend/message-driven commits.
+case "$SOURCE" in
+  merge|squash|commit|message)
+    exit 0
+    ;;
+esac
+
+# If user already wrote a subject, keep it.
+if grep -Eq '^[^#[:space:]]' "$MSG_FILE"; then
+  exit 0
+fi
+
+cat > "$MSG_FILE" <<'TEMPLATE'
+fix : "한국어로 작업 내용 한 줄 요약"
+
+# 형식: fix : "한국어 메시지"
+# 예시: fix : "고용 시각화 축 라벨 정리"
+TEMPLATE
