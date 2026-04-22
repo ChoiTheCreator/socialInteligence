@@ -15,13 +15,13 @@
 
 ## 산출물
 - 시각화: [`viz/employment_by_age_latest.png`](viz/employment_by_age_latest.png)
-- 스크립트: [`src/plot_employment_by_age_latest.py`](src/plot_employment_by_age_latest.py)
+- 노트북: [`notebooks/employment_by_age_latest.ipynb`](notebooks/employment_by_age_latest.ipynb)
+- 스크립트(선택): [`src/plot_employment_by_age_latest.py`](src/plot_employment_by_age_latest.py)
 
 ## 재현 방법
 
-```bash
-python3 employment_wage/src/plot_employment_by_age_latest.py
-```
+1. Jupyter에서 `employment_wage/notebooks/employment_by_age_latest.ipynb`를 열고 전체 셀 실행
+2. 결과 이미지가 `employment_wage/viz/employment_by_age_latest.png`에 저장됨
 
 ## 인사이트
 - 최신 월 기준, 중복 구간(15-29세/15-64세)을 제외한 기본 연령대 분포를 확인할 수 있음
