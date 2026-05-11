@@ -10,7 +10,9 @@ socialInteligence/
   health/             # 건강 (유진)
   education/          # 교육 (승민)
   employment_wage/    # 고용·임금 (원빈)
-  data_raw/           # 원본 데이터 보관
+  data/
+    raw/              # KOSIS 원본 또는 원본을 안정적인 파일명으로 보관
+    processed/        # 팀 공통 정제 데이터셋
   docs/               # 협업 문서
 ```
 
@@ -22,6 +24,10 @@ socialInteligence/
    - `README.md` (지표코드/기간/지역/출처/해석)
    - 시각화 파일(`viz/`)
    - 재현 스크립트 또는 노트북
+4. 여러 주제가 함께 쓰는 데이터는 루트 `data/` 아래에 둔다.
+   - 원본: `data/raw/{주제}/`
+   - 공통 최종 데이터셋: `data/processed/`
+   - 도메인별 중간 산출물: `data/processed/{주제}/`
 
 자세한 규칙은 [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md)를 참고하세요.
 
