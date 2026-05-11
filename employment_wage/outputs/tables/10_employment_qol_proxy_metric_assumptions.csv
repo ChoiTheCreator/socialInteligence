@@ -1,0 +1,11 @@
+﻿metric,label,direction,dimension,caution
+female_employed_share,여성 취업자 비중,higher_is_better,포용성,고용률이 아니라 취업자 구성비다. 여성 노동시장 참여의 proxy로만 해석한다.
+male_female_employed_share_gap,남녀 취업자 구성비 격차,lower_is_better,포용성,고용률 격차가 아니라 취업자 구성비 격차다.
+youth_employed_share,청년층 취업자 비중,higher_is_better,청년 고용 여건,청년 고용률이 아니라 취업자 중 청년층 비중이다. 지역 연령구조 영향을 받는다.
+wage_worker_share,임금근로자 비중,higher_is_better,고용 안정성,임금근로자 비중을 안정성 proxy로 사용한다. 일자리 질 전체를 대표하지는 않는다.
+temporary_worker_ratio,임시근로자 비율,lower_is_better,고용 안정성,전체 취업자 대비 임시근로자 비율이다.
+daily_worker_ratio,일용근로자 비율,lower_is_better,고용 안정성,전체 취업자 대비 일용근로자 비율이다.
+self_employed_ratio,자영업자 비율,lower_is_better,고용 안정성,자영업이 항상 낮은 삶의 질을 의미하지는 않는다. 불안정성 proxy로만 제한 해석한다.
+short_hours_worker_ratio,단시간 취업자 비율,lower_is_better,노동시간,단시간 근로는 자발적 선택일 수도 있다. 불완전취업 가능성 proxy로만 해석한다.
+long_hours_worker_ratio,장시간 취업자 비율,lower_is_better,노동시간,장시간 노동 부담 proxy로 해석한다.
+senior_employed_share,고령층 취업자 비중,reference_only,인구·노동시장 구조,높고 낮음 자체를 삶의 질 좋고 나쁨으로 점수화하지 않는다.
