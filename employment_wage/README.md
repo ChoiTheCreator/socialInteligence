@@ -21,6 +21,7 @@
 - 진단 테이블: [`outputs/tables/`](outputs/tables/)
 - 중간 정제 데이터: `../data/processed/employment_wage/`
 - 최종 공통 패널: `../data/processed/kosis_life_quality_employment_panel.csv`
+- 팀 공유용 Evidence Map: [`evidence_map/README.md`](evidence_map/README.md)
 
 ## 산출물
 - 시각화: [`viz/employment_by_age_latest.png`](viz/employment_by_age_latest.png)
