@@ -11,7 +11,16 @@
 - 기간: 2025.10 ~ 2026.03
 - 지역: 전국(계)
 - 단위: 원본 파일 기준
-- 원본 파일: `행정구역_시도__연령별_취업자_20260422160402.csv`
+- 원본 보존 위치: `../data/raw/employment_wage/source_downloads/`
+- 분석용 안정 파일명 위치: `../data/raw/employment_wage/`
+
+## 삶의 질-고용 EDA
+
+- 노트북: [`notebooks/01_eda_kosis_employment_life_quality.ipynb`](notebooks/01_eda_kosis_employment_life_quality.ipynb)
+- 유틸리티: [`src/eda_utils.py`](src/eda_utils.py)
+- 진단 테이블: [`outputs/tables/`](outputs/tables/)
+- 중간 정제 데이터: `../data/processed/employment_wage/`
+- 최종 공통 패널: `../data/processed/kosis_life_quality_employment_panel.csv`
 
 ## 산출물
 - 시각화: [`viz/employment_by_age_latest.png`](viz/employment_by_age_latest.png)
@@ -22,6 +31,7 @@
 
 1. Jupyter에서 `employment_wage/notebooks/employment_by_age_latest.ipynb`를 열고 전체 셀 실행
 2. 결과 이미지가 `employment_wage/viz/employment_by_age_latest.png`에 저장됨
+3. 삶의 질-고용 EDA는 `employment_wage/notebooks/01_eda_kosis_employment_life_quality.ipynb`를 열고 전체 셀 실행
 
 ## 인사이트
 - 최신 월 기준, 중복 구간(15-29세/15-64세)을 제외한 기본 연령대 분포를 확인할 수 있음

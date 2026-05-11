@@ -59,14 +59,22 @@ def age_sort_key(label: str) -> int:
     return 999
 
 
+def resolve_repo_root() -> Path:
+    current = Path.cwd().resolve()
+    for path in [current, *current.parents]:
+        if (path / "data").exists() and (path / "employment_wage").exists():
+            return path
+    raise FileNotFoundError("No repository root found. Run from socialInteli/Projct or one of its subfolders.")
+
+
 def main() -> None:
     args = parse_args()
-    root = Path.cwd()
+    root = resolve_repo_root()
 
     if args.input is None:
-        candidates = sorted((root / "employment_wage").glob("*.csv"))
+        candidates = sorted((root / "data" / "raw" / "employment_wage").glob("employment_region_age.csv"))
         if not candidates:
-            raise FileNotFoundError("No CSV found under employment_wage/")
+            raise FileNotFoundError("No employment_region_age.csv found under data/raw/employment_wage/")
         input_csv = candidates[0]
     else:
         input_csv = args.input
