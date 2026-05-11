@@ -11,3 +11,29 @@ venv/
 # Editor
 .vscode/
 .idea/
+
+# Raw download archives
+# Keep stable, renamed raw CSVs under data/raw/{domain}/, but do not commit
+# duplicate one-off KOSIS download filenames.
+data/raw/*/source_downloads/
+
+# Regenerable processed intermediates
+# Keep cross-domain final datasets directly under data/processed/.
+data/processed/*/
+
+# Regenerable EDA diagnostics and logs
+employment_wage/outputs/tables/01_*.csv
+employment_wage/outputs/tables/02_*.csv
+employment_wage/outputs/tables/03_life_satisfaction_summary.csv
+employment_wage/outputs/tables/03_feature_build_log.csv
+employment_wage/outputs/tables/03_year_region_unit_check.csv
+employment_wage/outputs/tables/04_*.csv
+employment_wage/outputs/tables/05_merge_failed_rows.csv
+employment_wage/outputs/tables/05_visualization_index.csv
+employment_wage/outputs/tables/06_visualization_log.csv
+employment_wage/outputs/tables/07_metro_nonmetro_gap_summary.csv
+employment_wage/outputs/tables/08_correlation_summary.csv
+employment_wage/outputs/tables/09_permutation_importance.csv
+
+# Regenerable exploratory figures
+employment_wage/outputs/figures/eda_*.png
