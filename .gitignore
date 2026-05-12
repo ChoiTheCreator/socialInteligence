@@ -11,3 +11,6 @@ venv/
 # Editor
 .vscode/
 .idea/
+
+# 대용량 원본 데이터 (CSV 파일 개당 160-270MB)
+health/data/*.csv
