@@ -533,9 +533,6 @@ sns.heatmap(hm_age, annot=True, fmt=".1f", cmap="RdYlGn", ax=ax,
             cbar_kws={"label": "소유율 (%)"}, linewidths=0.4, vmin=5, vmax=75)
 ax.set_title("연령대 × 연도별 주택소유율 히트맵 (%) — 전국", pad=12)
 ax.tick_params(axis="x", rotation=30)
-idx2024 = [str(y) for y in YEARS].index("2024")
-ax.add_patch(plt.Rectangle((idx2024, 0), 1, len(age_order),
-             fill=False, edgecolor="red", lw=2.5, clip_on=False))
 fig.tight_layout()
 save(fig, "12_연령대_연도_소유율_히트맵.png")
 
