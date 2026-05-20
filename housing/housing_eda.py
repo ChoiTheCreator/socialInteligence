@@ -443,63 +443,81 @@ ax.grid(axis="y", alpha=0.3)
 fig.tight_layout()
 save(fig, "08_수도권vs비수도권_추이.png")
 
-# ── 그림 09: 2024 단면 — 지역 × 성별 소유율 (실데이터) ──────────────────────
-df_24 = df_ts[df_ts["연도"] == 2024]
+# ── 그림 09: 지역 × 성별 소유율 — 연도별 남녀 격차 히트맵 ──────────────────
+# 남자 소유율 - 여자 소유율 (격차) 를 연도 × 지역으로 시각화
+SELECT_YEARS = [2016, 2018, 2020, 2022, 2024, "2026Q1"]
 
-rows_cross = []
-for reg in REGIONS:
-    for gender in GENDERS:
-        own_v = df_24[(df_24["유형"] == "주택소유_가구수") &
-                      (df_24["지역"] == reg) & (df_24["성별"] == gender)]["값"].sum()
-        no_v  = df_24[(df_24["유형"] == "무주택_가구수") &
-                      (df_24["지역"] == reg) & (df_24["성별"] == gender)]["값"].sum()
+rows_gap_yr = []
+for yr in SELECT_YEARS:
+    sub = df_ts[df_ts["연도"] == yr]
+    for reg in REGIONS:
+        for gender in GENDERS:
+            own_v = sub[(sub["유형"] == "주택소유_가구수") &
+                        (sub["지역"] == reg) & (sub["성별"] == gender)]["값"].sum()
+            no_v  = sub[(sub["유형"] == "무주택_가구수") &
+                        (sub["지역"] == reg) & (sub["성별"] == gender)]["값"].sum()
+            tot   = own_v + no_v
+            rows_gap_yr.append({"연도": str(yr), "지역": reg, "성별": gender,
+                                 "소유율": round(own_v / tot * 100, 1) if tot > 0 else np.nan})
+
+df_gap_yr = pd.DataFrame(rows_gap_yr)
+df_gap_piv = df_gap_yr.pivot_table(index=["지역","연도"], columns="성별", values="소유율").reset_index()
+df_gap_piv["남녀격차"] = df_gap_piv["남자"] - df_gap_piv["여자"]
+hm_gap = df_gap_piv.pivot_table(index="지역", columns="연도", values="남녀격차")
+hm_gap = hm_gap.reindex(columns=[str(y) for y in SELECT_YEARS])
+
+fig, ax = plt.subplots(figsize=(11, 9))
+sns.heatmap(hm_gap, annot=True, fmt=".1f", cmap="PuOr_r", ax=ax,
+            cbar_kws={"label": "남자 - 여자 소유율 격차 (pp)"},
+            linewidths=0.5, center=0)
+ax.set_title("지역 × 연도별 성별 주택소유율 격차 (남자 − 여자, pp)\n(2016~2026Q1 주요 연도)", pad=12)
+ax.set_xlabel("연도")
+ax.set_ylabel("")
+fig.tight_layout()
+save(fig, "09_지역_연도별_성별격차_히트맵.png")
+
+# ── 그림 10: 주요 지표 상관관계 — 연도별 패널 (4개 연도) ────────────────────
+PANEL_YEARS = [2016, 2019, 2022, 2024]
+PALETTE_10  = ["#A8DADC", "#457B9D", "#1D3557", "#E63946"]
+
+fig, axes = plt.subplots(2, 2, figsize=(14, 11))
+axes = axes.flatten()
+
+for ax, yr, col in zip(axes, PANEL_YEARS, PALETTE_10):
+    sub_yr = df_ts[df_ts["연도"] == yr]
+    rows_c = []
+    for reg in REGIONS:
+        s = sub_yr[sub_yr["지역"] == reg]
+        own_v = s[s["유형"] == "주택소유_가구수"]["값"].sum()
+        no_v  = s[s["유형"] == "무주택_가구수"]["값"].sum()
+        apt_v = s[s["유형"] == "아파트소유_가구수"]["값"].sum()
+        s_v   = s[s["유형"] == "1인가구_주택소유"]["값"].sum()
         tot   = own_v + no_v
-        rows_cross.append({"지역": reg, "성별": gender,
-                           "소유율": round(own_v / tot * 100, 1) if tot > 0 else np.nan})
-df_cross = pd.DataFrame(rows_cross)
-hm_cross = df_cross.pivot_table(index="지역", columns="성별", values="소유율")
+        rows_c.append({
+            "지역":          reg,
+            "주택소유율(%)":  round(own_v / tot * 100, 1) if tot > 0 else np.nan,
+            "아파트비율(%)":  round(apt_v / own_v * 100, 1) if own_v > 0 else np.nan,
+            "1인가구비율(%)": round(s_v / own_v * 100, 1) if own_v > 0 else np.nan,
+        })
+    df_c = pd.DataFrame(rows_c).dropna()
+    r, p = stats.pearsonr(df_c["주택소유율(%)"], df_c["아파트비율(%)"])
+    sns.regplot(data=df_c, x="주택소유율(%)", y="아파트비율(%)", ax=ax,
+                scatter_kws={"s": 55, "color": col, "alpha": 0.85},
+                line_kws={"color": "gray", "linewidth": 1.2})
+    for _, row in df_c.iterrows():
+        ax.annotate(row["지역"], (row["주택소유율(%)"], row["아파트비율(%)"]),
+                    fontsize=6, ha="center", va="bottom", color="#333333")
+    ax.set_title(f"{yr}년  (r = {r:.2f}, p = {p:.3f})", fontsize=11)
+    ax.set_xlabel("주택소유율 (%)")
+    ax.set_ylabel("아파트비율 (%)")
+    ax.set_xlim(40, 72)
+    ax.set_ylim(35, 95)
+    ax.grid(alpha=0.2)
 
-fig, ax = plt.subplots(figsize=(7, 9))
-sns.heatmap(hm_cross, annot=True, fmt=".1f", cmap="RdYlGn", ax=ax,
-            cbar_kws={"label": "소유율 (%)"}, linewidths=0.5, vmin=30, vmax=75)
-ax.set_title("2024년 지역 × 성별 주택소유율 (%)", pad=10)
+fig.suptitle("연도별 지역 주택소유율 vs 아파트비율 상관관계 (2016·2019·2022·2024)",
+             fontsize=13, fontweight="bold", y=1.01)
 fig.tight_layout()
-save(fig, "09_2024_지역_성별_소유율.png")
-
-# ── 그림 10: 상관관계 — 2024 지역별 지표 ────────────────────────────────────
-rows_corr = []
-for reg in REGIONS:
-    sub = df_24[df_24["지역"] == reg]
-    own_v = sub[sub["유형"] == "주택소유_가구수"]["값"].sum()
-    no_v  = sub[sub["유형"] == "무주택_가구수"]["값"].sum()
-    apt_v = sub[sub["유형"] == "아파트소유_가구수"]["값"].sum()
-    s_v   = sub[sub["유형"] == "1인가구_주택소유"]["값"].sum()
-    tot   = own_v + no_v
-    rows_corr.append({
-        "지역":          reg,
-        "주택소유율(%)":  round(own_v / tot * 100, 1) if tot > 0 else np.nan,
-        "아파트비율(%)":  round(apt_v / own_v * 100, 1) if own_v > 0 else np.nan,
-        "1인가구비율(%)": round(s_v / own_v * 100, 1)  if own_v > 0 else np.nan,
-    })
-df_corr = pd.DataFrame(rows_corr).set_index("지역")
-
-fig, axes = plt.subplots(1, 2, figsize=(13, 5))
-for ax, (x_col, y_col, col) in zip(axes, [
-        ("주택소유율(%)", "아파트비율(%)",  "#457B9D"),
-        ("주택소유율(%)", "1인가구비율(%)", "#2A9D8F"),
-]):
-    valid = df_corr[[x_col, y_col]].dropna()
-    r, p  = stats.pearsonr(valid[x_col], valid[y_col])
-    sns.regplot(data=valid, x=x_col, y=y_col, ax=ax,
-                scatter_kws={"s": 60, "color": col},
-                line_kws={"color": "#E63946"})
-    for region, row in valid.iterrows():
-        ax.annotate(region, (row[x_col], row[y_col]), fontsize=6.5, ha="center", va="bottom")
-    ax.set_title(f"{x_col} vs {y_col}\n(r={r:.2f}, p={p:.3f})")
-
-fig.suptitle("2024년 지역별 주요 지표 상관관계", fontsize=13, y=1.02)
-fig.tight_layout()
-save(fig, "10_2024_지표_상관관계.png")
+save(fig, "10_연도별_지표_상관관계_패널.png")
 
 # ── 그림 11: 연도별 성별 격차 변화 (남-여 소유율 차이) ──────────────────────
 df_gap = df_gen_ts.pivot_table(index="연도", columns="성별", values="소유율").reset_index()
@@ -534,9 +552,22 @@ fig.tight_layout()
 save(fig, "12_연령대_연도_소유율_히트맵.png")
 
 # ─── 상관관계 요약 출력 ───────────────────────────────────────────────────────
-print("\n[4] 2024 실데이터 상관관계")
+print("\n[4] 연도별 지표 상관관계 (주택소유율 vs 아파트비율)")
 print("=" * 45)
-print(df_corr.corr(numeric_only=True).round(3).to_string())
+for yr in PANEL_YEARS:
+    sub_yr = df_ts[df_ts["연도"] == yr]
+    rows_c = []
+    for reg in REGIONS:
+        s = sub_yr[sub_yr["지역"] == reg]
+        own_v = s[s["유형"] == "주택소유_가구수"]["값"].sum()
+        no_v  = s[s["유형"] == "무주택_가구수"]["값"].sum()
+        apt_v = s[s["유형"] == "아파트소유_가구수"]["값"].sum()
+        tot   = own_v + no_v
+        rows_c.append({"주택소유율": round(own_v/tot*100,1) if tot>0 else np.nan,
+                        "아파트비율": round(apt_v/own_v*100,1) if own_v>0 else np.nan})
+    df_c = pd.DataFrame(rows_c).dropna()
+    r, p = stats.pearsonr(df_c["주택소유율"], df_c["아파트비율"])
+    print(f"  {yr}년: r = {r:.3f}, p = {p:.3f}")
 
 print("\n[5] 연도별 전국 주택소유율 요약")
 print("=" * 45)
