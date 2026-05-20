@@ -268,11 +268,6 @@ ax.set_title("2016~2026Q1 지역별 주택소유율 히트맵 (%)", pad=12)
 ax.set_xlabel("연도")
 ax.set_ylabel("")
 ax.tick_params(axis="x", rotation=30)
-# 2024 컬럼 강조
-cols = [str(y) for y in YEARS]
-idx2024 = cols.index("2024")
-ax.add_patch(plt.Rectangle((idx2024, 0), 1, len(REGIONS),
-             fill=False, edgecolor="red", lw=2.5, clip_on=False))
 fig.tight_layout()
 save(fig, "02_지역별_연도별_소유율_히트맵.png")
 
