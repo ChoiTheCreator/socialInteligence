@@ -376,9 +376,6 @@ sns.heatmap(hm_apt, annot=True, fmt=".1f", cmap="Blues", ax=ax,
             cbar_kws={"label": "아파트 비율 (%)"}, linewidths=0.3)
 ax.set_title("2016~2026Q1 지역별 아파트소유 비율 히트맵 (%)\n(소유 가구 중 아파트 비중)", pad=12)
 ax.tick_params(axis="x", rotation=30)
-idx2024 = [str(y) for y in YEARS].index("2024")
-ax.add_patch(plt.Rectangle((idx2024, 0), 1, len(REGIONS),
-             fill=False, edgecolor="red", lw=2.5, clip_on=False))
 fig.tight_layout()
 save(fig, "06_지역별_아파트비율_히트맵.png")
 
