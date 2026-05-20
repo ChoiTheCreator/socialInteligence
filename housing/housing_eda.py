@@ -235,7 +235,7 @@ ax1.set_title("2016~2026Q1 전국 주택소유 vs 무주택 가구 수 추이", 
 ax1.legend()
 ax1.yaxis.set_major_formatter(plt.FuncFormatter(lambda v, _: f"{v:.1f}M"))
 ax2.plot(x, merged["소유율(%)"], marker="o", color="#2A9D8F", linewidth=2)
-ax2.axvline(labels.index("2024"), color="red", linestyle="--", alpha=0.5, label="실데이터(2024)")
+ax2.axvline(labels.index("2024"), color="red", linestyle="--", alpha=0.5, label="2024")
 ax2.set_ylabel("주택소유율 (%)")
 ax2.set_xlabel("연도")
 ax2.set_xticks(list(x))
@@ -284,7 +284,7 @@ fig, ax = plt.subplots(figsize=(12, 6))
 for reg, col in zip(HIGHLIGHT, COLORS):
     sub = df_rate[df_rate["지역"] == reg].sort_values("연도")
     ax.plot(sub["연도"], sub["소유율"], marker="o", linewidth=2, label=reg, color=col)
-ax.axvline("2024", color="gray", linestyle="--", alpha=0.6, label="실데이터(2024)")
+ax.axvline("2024", color="gray", linestyle="--", alpha=0.6, label="2024")
 ax.set_xlabel("연도")
 ax.set_ylabel("주택소유율 (%)")
 ax.set_title("주요 지역 주택소유율 연도별 추이 (2016~2026Q1)", pad=10)
@@ -312,7 +312,7 @@ palette = sns.color_palette("tab10", len(AGE_GROUPS))
 for age, col in zip(AGE_GROUPS, palette):
     sub = df_age_ts[df_age_ts["연령대"] == age].sort_values("연도")
     ax.plot(sub["연도"], sub["소유율"], marker="o", linewidth=2, label=age, color=col)
-ax.axvline("2024", color="gray", linestyle="--", alpha=0.6, label="실데이터")
+ax.axvline("2024", color="gray", linestyle="--", alpha=0.6, label="2024")
 ax.set_xlabel("연도")
 ax.set_ylabel("주택소유율 (%)")
 ax.set_title("연령대별 주택소유율 연도별 추이 (2016~2026Q1)", pad=10)
@@ -398,7 +398,7 @@ fig, ax = plt.subplots(figsize=(12, 5))
 for grp, col in zip(["청년층(30대 이하)","중장년층(50~60대)"], ["#E63946","#457B9D"]):
     sub = df_ym[df_ym["그룹"] == grp].sort_values("연도")
     ax.plot(sub["연도"], sub["소유율"], marker="o", linewidth=2.5, label=grp, color=col)
-ax.axvline("2024", color="gray", linestyle="--", alpha=0.6, label="실데이터")
+ax.axvline("2024", color="gray", linestyle="--", alpha=0.6, label="2024")
 ax.set_xlabel("연도")
 ax.set_ylabel("주택소유율 (%)")
 ax.set_title("청년층 vs 중장년층 주택소유율 격차 추이 (2016~2026Q1)", pad=10)
@@ -462,7 +462,7 @@ hm_cross = df_cross.pivot_table(index="지역", columns="성별", values="소유
 fig, ax = plt.subplots(figsize=(7, 9))
 sns.heatmap(hm_cross, annot=True, fmt=".1f", cmap="RdYlGn", ax=ax,
             cbar_kws={"label": "소유율 (%)"}, linewidths=0.5, vmin=30, vmax=75)
-ax.set_title("2024년(실데이터) 지역 × 성별 주택소유율 (%)", pad=10)
+ax.set_title("2024년 지역 × 성별 주택소유율 (%)", pad=10)
 fig.tight_layout()
 save(fig, "09_2024_지역_성별_소유율.png")
 
@@ -497,7 +497,7 @@ for ax, (x_col, y_col, col) in zip(axes, [
         ax.annotate(region, (row[x_col], row[y_col]), fontsize=6.5, ha="center", va="bottom")
     ax.set_title(f"{x_col} vs {y_col}\n(r={r:.2f}, p={p:.3f})")
 
-fig.suptitle("2024년(실데이터) 지역별 주요 지표 상관관계", fontsize=13, y=1.02)
+fig.suptitle("2024년 지역별 주요 지표 상관관계", fontsize=13, y=1.02)
 fig.tight_layout()
 save(fig, "10_2024_지표_상관관계.png")
 
@@ -507,7 +507,7 @@ df_gap["격차(남-여)"] = df_gap["남자"] - df_gap["여자"]
 
 fig, ax = plt.subplots(figsize=(12, 4))
 bars = ax.bar(df_gap["연도"], df_gap["격차(남-여)"], color="#6A4C93", alpha=0.8)
-ax.axvline("2024", color="red", linestyle="--", alpha=0.5, label="실데이터")
+ax.axvline("2024", color="red", linestyle="--", alpha=0.5, label="2024")
 ax.set_xlabel("연도")
 ax.set_ylabel("남녀 소유율 격차 (pp)")
 ax.set_title("연도별 남녀 주택소유율 격차 추이 (2016~2026Q1)", pad=10)
