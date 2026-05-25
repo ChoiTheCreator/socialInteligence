@@ -1,0 +1,7 @@
+{
+  "name": "Employment Slides Generator",
+  "id": "employment-slides-generator",
+  "api": "1.0.0",
+  "main": "create_employment_figma_slides.js",
+  "editorType": ["figma"]
+}
