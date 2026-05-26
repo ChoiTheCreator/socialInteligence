@@ -99,8 +99,8 @@ Apple SD Gothic Neo, ExtraBold, shadow, SVG, 외부 이미지, 복잡한 mask는
    - `raw_eda_diagnosis.csv`의 결측률, 분기 수, 지역 수를 표로 보여준다.
 
 3. 분석 프레임워크
-   - `analysis_framework.csv`의 6개 proxy 차원을 카드로 보여준다.
-   - 단순 고용률 분석이 아니라 삶의 질 proxy 설계라는 점을 강조한다.
+   - `analysis_framework.csv`의 6개 고용 여건 평가 차원을 카드로 보여준다.
+   - 단순 고용률 분석이 아니라 삶의 질과 연결되는 고용 평가 기준을 세웠다는 점을 강조한다.
 
 4. EDA 추세
    - 2016~2025 수도권/비수도권 고용률 추세와 2025 지역 간 range를 함께 보여준다.
@@ -188,4 +188,3 @@ Apple SD Gothic Neo, ExtraBold, shadow, SVG, 외부 이미지, 복잡한 mask는
 - 텍스트/도형이 1280 x 720 프레임 밖으로 나가지 않는가?
 - 하단 바가 본문을 덮지 않는가?
 - `node --check`가 통과했는가?
-

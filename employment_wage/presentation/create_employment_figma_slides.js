@@ -510,8 +510,8 @@ function slide03(startY) {
   const s = slide(3, '분석 프레임워크', startY);
   header(
     s,
-    'Proxy Framework',
-    '삶의 질 proxy를 임의로 잡지 않았다',
+    'Evaluation Framework',
+    '고용 여건 평가 기준을 먼저 세웠다',
     '보고서는 고용이 삶의 질에 영향을 주는 경로를 6개 차원으로 정의했다.',
   );
 
@@ -556,7 +556,7 @@ function slide03(startY) {
   dims.forEach((d, i) => {
     const x = 58 + (i % 2) * 454;
     const y = 178 + Math.floor(i / 2) * 104;
-    const c = frame(s, 'Proxy Dimension', x, y, 420, 82, C.card, 16);
+    const c = frame(s, 'Evaluation Dimension', x, y, 420, 82, C.card, 16);
     rect(c, 0, 0, 8, 82, d[3], 0);
     text(c, d[0], 24, 14, 190, 15, C.title, FONT.bold, 20);
     text(c, d[1], 24, 40, 250, 11, C.body, FONT.medium, 16);
